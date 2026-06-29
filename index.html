@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大明寰宇萬國志 - 御前史官編纂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        imperial: {
+                            red: '#8B1C1C',
+                            gold: '#D4AF37',
+                            dark: '#1A1A1A',
+                            paper: '#FDFBF7',
+                            border: '#E2D5B5'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        sans: ['"Noto Sans TC"', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'paper-texture': "url('data:image/svg+xml,%3Csvg width=\\'100\\' height=\\'100\\' viewBox=\\'0 0 100 100\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cfilter id=\\'noise\\'%3E%3CfeTurbulence type=\\'fractalNoise\\' baseFrequency=\\'0.8\\' numOctaves=\\'4\\' stitchTiles=\\'stitch\\'/%3E%3C/filter%3E%3Crect width=\\'100\\' height=\\'100\\' filter=\\'url(%23noise)\\' opacity=\\'0.05\\'/%3E%3C/svg%3E')"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.04"/%3E%3C/svg%3E');
+            scroll-behavior: smooth;
+        }
+        
+        /* 御用卷軸捲動條 */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+            border-left: 1px solid #E2D5B5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 6px;
+            border: 3px solid #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B1C1C;
+        }
+
+        .seal {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #8B1C1C;
+            color: #8B1C1C;
+            font-family: 'Noto Serif TC', serif;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: -2px;
+            opacity: 0.8;
+            transform: rotate(-5deg);
+        }
+
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #8B1C1C;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(139, 28, 28, 0.1), 0 10px 10px -5px rgba(139, 28, 28, 0.04);
+            border-color: #D4AF37;
+        }
+
+        /* 模態框動畫 */
+        #modal-backdrop {
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+        #modal-content {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="font-sans text-imperial-dark antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <nav class="sticky top-0 z-40 bg-imperial-paper/90 backdrop-blur border-b-2 border-imperial-gold shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-4">
+                    <div class="seal text-xs p-1">御前<br>史官</div>
+                    <div>
+                        <h1 class="text-2xl font-serif font-black tracking-widest text-imperial-red">大明寰宇萬國志</h1>
+                        <p class="text-xs font-serif text-imperial-gold tracking-widest">學妹元年 欽定版</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8 font-serif font-bold">
+                    <a href="#ming" class="text-imperial-dark hover:text-imperial-red transition-colors">天朝大明</a>
+                    <a href="#nations" class="text-imperial-dark hover:text-imperial-red transition-colors">列國諸侯</a>
+                    <a href="#orgs" class="text-imperial-dark hover:text-imperial-red transition-colors">國際同盟</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative py-20 lg:py-32 overflow-hidden border-b border-imperial-border">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518998053401-878c735777a5?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-multiply"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <i class="fas fa-scroll text-5xl text-imperial-gold mb-6 opacity-80"></i>
+            <h2 class="text-4xl md:text-5xl font-serif font-black mb-8 text-imperial-red leading-tight">
+                普天之下，莫非王土<br>率土之濱，莫非王臣
+            </h2>
+            <div class="bg-white/60 p-8 rounded-xl border border-imperial-border shadow-xl backdrop-blur-sm relative">
+                <div class="absolute -top-4 -left-4 text-4xl text-imperial-gold opacity-50"><i class="fas fa-quote-left"></i></div>
+                <p class="text-lg md:text-xl font-serif leading-relaxed text-left text-gray-800" id="historian-intro">
+                    <!-- JS 打字機效果注入區 -->
+                </p>
+                <div class="mt-6 text-right font-serif text-sm text-gray-600">
+                    —— 內閣首席大學士 謹奏
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- 天朝大明 -->
+        <section id="ming" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-imperial-gold font-bold tracking-widest text-sm uppercase">The Great Ming Empire</span>
+                    <h3 class="text-4xl font-serif font-black text-imperial-red mt-2 relative inline-block">
+                        大明帝國
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-imperial-gold"></div>
+                    </h3>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-2xl border-2 border-imperial-gold overflow-hidden flex flex-col lg:flex-row relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-imperial-red transform translate-x-16 -translate-y-16 rotate-45 opacity-10"></div>
+                    
+                    <div class="lg:w-2/5 bg-imperial-red text-white p-10 flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                        <div class="relative z-10">
+                            <h4 class="text-3xl font-serif font-bold mb-2">聖天子 Angus Cheng</h4>
+                            <p class="text-imperial-gold text-lg mb-6 tracking-widest">【皇后：學妹】</p>
+                            <div class="space-y-4 font-sans text-sm md:text-base opacity-90">
+                                <p class="flex items-center gap-3"><i class="fas fa-calendar-alt w-5"></i> 國號：學妹（學妹元年）</p>
+                                <p class="flex items-start gap-3"><i class="fas fa-globe-asia w-5 mt-1"></i> <span>領土：橫跨歐、亞、美洲。<br>西起大不列顛與歐洲大陸，東至海參崴與台灣島，及北美洲。</span></p>
+                                <p class="flex items-center gap-3"><i class="fas fa-landmark w-5"></i> 體制：聯邦制（地方自治、上下溝通良好）</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:w-3/5 p-10 grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#FDFBF7]">
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 bg-imperial-gold/20 text-imperial-red rounded-full flex items-center justify-center text-xl mb-4">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <h5 class="font-serif font-bold text-xl text-imperial-dark">教育與發展</h5>
+                            <p class="text-gray-600 text-sm leading-relaxed">國家提供完整義務教育，學齡前實施蒙特梭利教學法。所有教育皆以<strong class="text-imperial-red">心理學</strong>為基礎，重視品德與個體發展，造就極高的人民素養。</p>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="w-12 h-12 bg-imperial-gold/20 text-imperial-red rounded-full flex items-center justify-center text-xl mb-4">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h5 class="font-serif font-bold text-xl text-imperial-dark">學術鼎盛</h5>
+                            <p class="text-gray-600 text-sm leading-relaxed">設有大不列顛劍橋大學、北美哈佛大學、首都<strong class="text-imperial-red">學妹帝國大學</strong>。涵蓋理工、航太、精準醫學、人文藝術，均衡發展，廣納天下英才。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="nations" class="py-20 bg-gray-50 border-y border-imperial-border relative">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-gray-500 font-bold tracking-widest text-sm uppercase">Vassal States & Neighbors</span>
+                    <h3 class="text-4xl font-serif font-black text-imperial-dark mt-2 relative inline-block">
+                        寰宇列國
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-imperial-dark"></div>
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="nation-grid">
+                    <!-- 卡片將由 JS 動態生成，以保持程式碼整潔並支援互動 -->
+                </div>
+            </div>
+        </section>
+
+        <section id="orgs" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-imperial-gold font-bold tracking-widest text-sm uppercase">International Organizations</span>
+                    <h3 class="text-4xl font-serif font-black text-imperial-red mt-2 relative inline-block">
+                        國際同盟
+                        <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-imperial-gold"></div>
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <!-- 萬國聯盟 -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-imperial-border card-hover relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 text-6xl text-gray-100"><i class="fas fa-globe"></i></div>
+                        <h4 class="text-2xl font-serif font-bold text-imperial-dark mb-4 relative z-10">萬國聯盟 (聯合國)</h4>
+                        <ul class="space-y-3 text-sm text-gray-700 relative z-10 mb-6">
+                            <li><strong class="text-imperial-red">總部：</strong>大明帝國首都</li>
+                            <li><strong class="text-imperial-red">常任理事：</strong>大明帝國、蘇聯 (具否決權)</li>
+                            <li><strong class="text-imperial-red">成員：</strong>戴國、青青共和國、樂扣帝國</li>
+                            <li><strong class="text-imperial-red">觀察員：</strong>吳國</li>
+                        </ul>
+                        <p class="text-gray-600 text-sm bg-gray-50 p-4 rounded-lg border-l-4 border-imperial-gold">
+                            由大明帝國為首創立，旨在維護國際秩序。入會需由常任理事邀請，或成員國推薦並經常任理事同意。
+                        </p>
+                    </div>
+
+                    <!-- NATO -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-imperial-border card-hover relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 text-6xl text-gray-100"><i class="fas fa-shield-alt"></i></div>
+                        <h4 class="text-2xl font-serif font-bold text-imperial-dark mb-4 relative z-10">北大西洋公約組織 (NATO)</h4>
+                        <ul class="space-y-3 text-sm text-gray-700 relative z-10 mb-6">
+                            <li><strong class="text-imperial-red">發起國：</strong>大明帝國</li>
+                            <li><strong class="text-imperial-red">成員：</strong>大明帝國、吳國、戴國、青青共和國、樂扣帝國</li>
+                            <li><strong class="text-imperial-red">核心目標：</strong>防堵共產勢力（蘇聯）擴張</li>
+                        </ul>
+                        <p class="text-gray-600 text-sm bg-gray-50 p-4 rounded-lg border-l-4 border-blue-800">
+                            <strong>條約第5條：</strong>對一個成員國的武裝攻擊，應被視為對所有成員國的攻擊。（史官按：吳國防禦系統異常時，不知算不算攻擊自己？）
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 御用模態框 (隱藏預設) -->
+    <div id="modal-backdrop" class="fixed inset-0 z-50 bg-black/60 hidden flex items-center justify-center p-4 opacity-0 pointer-events-none">
+        <div id="modal-content" class="bg-[#FDFBF7] w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden scale-95 border-2 border-imperial-gold relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-imperial-red transition-colors z-10">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <div id="modal-body">
+                <!-- 動態注入內容 -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-imperial-dark text-imperial-paper py-12 border-t-4 border-imperial-red">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="seal mx-auto mb-6 border-imperial-gold text-imperial-gold">御印</div>
+            <p class="font-serif text-lg text-imperial-gold mb-2">大明帝國萬歲 · 學妹元年</p>
+            <p class="text-sm text-gray-400 opacity-80">內閣大學士暨御前史官 奉旨編纂</p>
+            <p class="text-xs text-gray-500 mt-4">此卷軸受最高皇權保護，任意竄改史實者，按大明律例處置。</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 史官引言打字效果 ---
+        const introText = "臣叩見聖天子。陛下文治武功，震鑠古今！大明國土橫跨三大洲，學妹帝國大學之光輝照耀萬民。臣奉旨編寫此《萬國志》，除彰顯我朝天威，亦將吳國之「怪怪的」、戴國之寶馬修車奇觀、以及北方赤色巨熊之「一粒」宣言，悉數載入史冊。請陛下御覽！";
+        const introElement = document.getElementById('historian-intro');
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < introText.length) {
+                introElement.innerHTML += introText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // 頁面載入後啟動打字機
+        window.onload = function() {
+            setTimeout(typeWriter, 500);
+            renderNations();
+        };
+
+        // --- 列國資料庫 (符合大明世界觀) ---
+        const nationsData = [
+            {
+                id: 'wu',
+                name: '吳國',
+                leader: '吳所',
+                consort: '夫人：阿紫',
+                territory: '伊朗',
+                icon: 'fa-chess-rook',
+                color: 'text-purple-800',
+                bg: 'bg-purple-100',
+                glitch: true,
+                description: '昔日吳所與普渡姐兩大勢力內亂，後由吳所掌權。坊間流傳：「吳所不能」。',
+                historianNote: '史官按：此國防禦系統極為異常，時常「自己打自己」。國君曾駕駛納智捷撞上賓士，總歸一句：「怪怪的」。'
+            },
+            {
+                id: 'dai',
+                name: '戴國',
+                leader: '戴威',
+                consort: '夫人：普渡姐',
+                territory: '以色列、南美洲',
+                icon: 'fa-cogs',
+                color: 'text-blue-800',
+                bg: 'bg-blue-100',
+                glitch: false,
+                description: '普渡姐原在吳國參與內亂，後以「綠茶」收買戴威而獨立建國。普渡姐時常請假，由學弟代為報告朝政。',
+                historianNote: '史官按：該國國家機器極不穩定，國君需常駕 BMW 四處奔波修理。且夜生活極度精彩，尤以「林森北路」地區為甚。'
+            },
+            {
+                id: 'qingqing',
+                name: '青青共和國',
+                leader: '總統：陳青澐 (青青)',
+                consort: '無',
+                territory: '西起巴爾幹半島，至日韓、東南亞、大洋洲及中美洲',
+                icon: 'fa-dove',
+                color: 'text-green-700',
+                bg: 'bg-green-100',
+                glitch: false,
+                description: '幅員遼闊的海島與半島共和國。旗下設有兩大藩屬國：老瑞的「玻璃共和國」(大洋洲) 與石先生的「摔車手合眾國」(東南亞)。',
+                historianNote: '史官按：分封藩屬國之舉，頗有我朝封建之遺風，然藩屬國名諱頗為奇特。'
+            },
+            {
+                id: 'lock',
+                name: '樂扣帝國',
+                leader: '羅佑軒 (Gary)',
+                consort: '無',
+                territory: '非洲地區',
+                icon: 'fa-flask',
+                color: 'text-orange-600',
+                bg: 'bg-orange-100',
+                glitch: false,
+                description: '受民族自決影響，非洲獨立後由羅佑宣所建立之帝國。',
+                historianNote: '史官按：此國君主有一特殊癖好，以愛用「樂扣水壺」聞名天下，故以此為國號，實乃性情中人。'
+            },
+            {
+                id: 'ussr',
+                name: '蘇維埃社會主義共和國聯邦',
+                leader: '賴誠右',
+                consort: '首席秘書：一粒',
+                territory: '俄國、波斯帝國 (含兩河流域、印度、紐澳)',
+                icon: 'fa-star',
+                color: 'text-red-700',
+                bg: 'bg-red-100',
+                glitch: false,
+                description: '賴誠右發動十月革命建立蘇俄，隨後併吞波斯帝國成立蘇聯。為萬國聯盟常任理事國之一。',
+                historianNote: '史官按：此國君主曾狂言：「一粒是蘇維埃的，誰都不能搶走她❤️...搶走她就是跟蘇維埃宣戰😡」。天朝對此表示：尊重，但大可不必。'
+            }
+        ];
+
+        // --- 渲染卡片邏輯 ---
+        function renderNations() {
+            const grid = document.getElementById('nation-grid');
+            grid.innerHTML = nationsData.map(nation => `
+                <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 card-hover cursor-pointer group flex flex-col h-full" onclick="openModal('${nation.id}')">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 ${nation.bg} ${nation.color} rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas ${nation.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-serif font-bold text-gray-900 ${nation.glitch ? 'glitch-hover' : ''}">${nation.name}</h4>
+                            <p class="text-sm text-gray-500">${nation.leader}</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm flex-grow line-clamp-3">${nation.description}</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-imperial-red text-sm font-bold">
+                        <span>開啟御覽</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- 模態框(Modal)互動邏輯 ---
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        const modalBody = document.getElementById('modal-body');
+
+        function openModal(id) {
+            const nation = nationsData.find(n => n.id === id);
+            if(!nation) return;
+
+            // 構建 Modal 內部 HTML
+            modalBody.innerHTML = `
+                <div class="bg-${nation.color.split('-')[1]}-800 p-6 text-white relative overflow-hidden" style="background-color: var(--tw-color-${nation.color.split('-')[1]}-800, #333)">
+                    <div class="absolute -right-4 -bottom-4 text-8xl opacity-20"><i class="fas ${nation.icon}"></i></div>
+                    <h2 class="text-3xl font-serif font-bold mb-1 ${nation.glitch ? 'glitch-hover' : ''}">${nation.name}</h2>
+                    <p class="text-white/80 font-serif tracking-wide">領袖：${nation.leader} ${nation.consort !== '無' ? `| ${nation.consort}` : ''}</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex items-start gap-3 text-gray-700">
+                        <i class="fas fa-map-marked-alt text-imperial-gold mt-1"></i>
+                        <div>
+                            <strong class="block text-gray-900">疆域領土</strong>
+                            <span class="text-sm">${nation.territory}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 text-gray-700">
+                        <i class="fas fa-scroll text-imperial-gold mt-1"></i>
+                        <div>
+                            <strong class="block text-gray-900">國家紀事</strong>
+                            <span class="text-sm leading-relaxed">${nation.description}</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-imperial-paper p-4 rounded border border-imperial-border/50 relative">
+                        <div class="absolute top-2 right-2 text-imperial-red/20 text-3xl"><i class="fas fa-feather-alt"></i></div>
+                        <p class="text-sm text-imperial-dark font-serif italic">${nation.historianNote}</p>
+                    </div>
+                    ${nation.glitch ? `
+                        <div class="mt-2 bg-red-100 text-red-800 p-2 rounded text-xs font-bold border border-red-300 flex items-center gap-2">
+                            <i class="fas fa-exclamation-triangle"></i> 警告：系統偵測到該國防禦系統正在攻擊自己。
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // 修正顏色以確保 tailwind 動態 class 生效 (簡易寫死顏色以防萬一)
+            const header = modalBody.querySelector('div:first-child');
+            if(nation.id === 'wu') header.style.backgroundColor = '#6B21A8'; // purple-800
+            if(nation.id === 'dai') header.style.backgroundColor = '#1E40AF'; // blue-800
+            if(nation.id === 'qingqing') header.style.backgroundColor = '#15803D'; // green-700
+            if(nation.id === 'lock') header.style.backgroundColor = '#EA580C'; // orange-600
+            if(nation.id === 'ussr') header.style.backgroundColor = '#B91C1C'; // red-700
+
+            // 顯示 Modal
+            modalBackdrop.classList.remove('hidden');
+            // 延遲一點點讓 display block 生效後再加 opacity，產生過渡動畫
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalBackdrop.classList.add('pointer-events-auto');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.add('opacity-0');
+            modalBackdrop.classList.remove('pointer-events-auto');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+            }, 300); // 等待 CSS 過渡完成
+        }
+
+        // 點擊背景也可關閉 Modal
+        modalBackdrop.addEventListener('click', function(e) {
+            if(e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
